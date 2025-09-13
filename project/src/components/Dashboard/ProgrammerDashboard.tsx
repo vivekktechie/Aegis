@@ -3,6 +3,7 @@ import { Container, Nav, Tab } from 'react-bootstrap';
 import Companies from './Programmer/Companies';
 import ResumeAnalyzer from './Programmer/ResumeAnalyzer';
 import QASessions from './Programmer/QASessions';
+import JobFinding from './Programmer/JobFinding';
 
 const ProgrammerDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('companies');
@@ -20,7 +21,7 @@ const ProgrammerDashboard: React.FC = () => {
             <Nav.Link eventKey="companies">Companies</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="analyzer">Resume Analyzer</Nav.Link>
+            <Nav.Link eventKey="JobFinder">Job Finder</Nav.Link>
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="sessions">Q&A Sessions</Nav.Link>
@@ -33,6 +34,9 @@ const ProgrammerDashboard: React.FC = () => {
           </Tab.Pane>
           <Tab.Pane eventKey="analyzer">
             <ResumeAnalyzer />
+          </Tab.Pane>
+          <Tab.Pane eventKey="JobFinder">
+            <JobFinding />
           </Tab.Pane>
           <Tab.Pane eventKey="sessions">
             <QASessions />
