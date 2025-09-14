@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Form, Button, Alert, Table } from 'react-bootstrap';
-import { Plus, Edit, Trash2, Briefcase } from 'lucide-react';
-import { useAuth } from '../../../context/AuthContext';
+import React, { useState, useEffect } from "react";
+import { Row, Col, Card, Form, Button, Alert, Table } from "react-bootstrap";
+import { Plus, Edit, Trash2, Briefcase } from "lucide-react";
+import { useAuth } from "../../../context/AuthContext";
 
 interface Job {
   id: string;
@@ -16,12 +16,13 @@ const ManageJobs: React.FC = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [formData, setFormData] = useState({
-    title: '',
-    description: ''
-  });
+  companyName: '',   // 🆕 add this
+  title: '',
+  description: ''
+});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     fetchJobs();
@@ -29,62 +30,68 @@ const ManageJobs: React.FC = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/jobs/recruiter/${user?.id}`);
+      const response = await fetch(
+        `http://localhost:5000/api/jobs/recruiter/${user?.id}`
+      );
       if (response.ok) {
         const data = await response.json();
         setJobs(data.jobs);
       }
     } catch (err) {
-      console.error('Error fetching jobs:', err);
+      console.error("Error fetching jobs:", err);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title.trim() || !formData.description.trim()) {
-      setError('Please fill in all fields');
+      setError("Please fill in all fields");
       return;
     }
 
     setLoading(true);
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     try {
-      const url = editingJob 
+      const url = editingJob
         ? `http://localhost:5000/api/jobs/${editingJob.id}`
-        : 'http://localhost:5000/api/jobs';
-      
-      const method = editingJob ? 'PUT' : 'POST';
-      
+        : "http://localhost:5000/api/jobs";
+
+      const method = editingJob ? "PUT" : "POST";
+
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           ...formData,
-          recruiterId: user?.id
+          recruiterId: user?.id,
         }),
       });
 
       if (response.ok) {
-        setSuccess(editingJob ? 'Job updated successfully!' : 'Job created successfully!');
-        setFormData({ title: '', description: '' });
+        setSuccess(
+          editingJob ? "Job updated successfully!" : "Job created successfully!"
+        );
+        setFormData({ title: "", description: "" });
         setEditingJob(null);
         fetchJobs();
       } else {
-        setError('Operation failed. Please try again.');
+        setError("Operation failed. Please try again.");
       }
     } catch (err) {
-      setError('Network error. Please check your connection.');
+      setError("Network error. Please check your connection.");
     } finally {
       setLoading(false);
     }
@@ -94,52 +101,62 @@ const ManageJobs: React.FC = () => {
     setEditingJob(job);
     setFormData({
       title: job.title,
-      description: job.description
+      description: job.description,
     });
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
   };
 
   const handleCancelEdit = () => {
     setEditingJob(null);
-    setFormData({ title: '', description: '' });
-    setError('');
-    setSuccess('');
+    setFormData({ title: "", description: "" });
+    setError("");
+    setSuccess("");
   };
 
   const handleDelete = async (jobId: string) => {
-    if (!window.confirm('Are you sure you want to delete this job?')) {
+    if (!window.confirm("Are you sure you want to delete this job?")) {
       return;
     }
 
     try {
       const response = await fetch(`http://localhost:5000/api/jobs/${jobId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
-        setSuccess('Job deleted successfully!');
+        setSuccess("Job deleted successfully!");
         fetchJobs();
       } else {
-        setError('Failed to delete job.');
+        setError("Failed to delete job.");
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      setError("Network error. Please try again.");
     }
   };
 
   return (
     <div>
       <h4 className="mb-4">Manage Job Roles</h4>
-      
+
       <Row>
         <Col lg={4}>
           <Card>
             <Card.Body>
               <h5 className="mb-3">
-                {editingJob ? 'Edit Job Role' : 'Create New Job Role'}
+                {editingJob ? "Edit Job Role" : "Create New Job Role"}
               </h5>
-              
+              <Form.Group className="mb-3">
+                <Form.Label>Company Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleInputChange}
+                  placeholder="e.g., OpenAI"
+                  required
+                />
+              </Form.Group>
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
                   <Form.Label>Job Title</Form.Label>
@@ -179,18 +196,21 @@ const ManageJobs: React.FC = () => {
                     {loading ? (
                       <>
                         <span className="loading-spinner me-2"></span>
-                        {editingJob ? 'Updating...' : 'Creating...'}
+                        {editingJob ? "Updating..." : "Creating..."}
                       </>
                     ) : (
                       <>
                         <Plus size={16} className="me-2" />
-                        {editingJob ? 'Update Job' : 'Create Job'}
+                        {editingJob ? "Update Job" : "Create Job"}
                       </>
                     )}
                   </Button>
-                  
+
                   {editingJob && (
-                    <Button variant="outline-secondary" onClick={handleCancelEdit}>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={handleCancelEdit}
+                    >
                       Cancel
                     </Button>
                   )}
@@ -213,7 +233,9 @@ const ManageJobs: React.FC = () => {
                 <div className="text-center p-5">
                   <Briefcase size={48} className="text-muted mb-3" />
                   <p className="text-muted">No job roles created yet.</p>
-                  <p className="text-muted">Create your first job posting to get started!</p>
+                  <p className="text-muted">
+                    Create your first job posting to get started!
+                  </p>
                 </div>
               ) : (
                 <Table responsive>
@@ -232,11 +254,10 @@ const ManageJobs: React.FC = () => {
                           <strong>{job.title}</strong>
                         </td>
                         <td>
-                          <div style={{ maxWidth: '300px' }}>
+                          <div style={{ maxWidth: "300px" }}>
                             {job.description.length > 100
                               ? `${job.description.substring(0, 100)}...`
-                              : job.description
-                            }
+                              : job.description}
                           </div>
                         </td>
                         <td>

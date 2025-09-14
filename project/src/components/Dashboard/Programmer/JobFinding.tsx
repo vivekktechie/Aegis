@@ -38,40 +38,46 @@ const JobFinding: React.FC = () => {
       setResumeFile(e.target.files[0]);
     }
   };
+const handleAnalyze = async () => {
+  if (!resumeFile) {
+    setError('Please upload a resume.');
+    return;
+  }
 
-  const handleAnalyze = async () => {
-    if (!resumeFile) {
-      setError('Please upload a resume.');
-      return;
+  setLoading(true);
+  setError('');
+  setAnalysis(null);
+  setMatchedJobs([]);
+
+  const formData = new FormData();
+  formData.append('resume', resumeFile);
+  formData.append('jobDescription', jobDescription);
+
+  try {
+    const response = await fetch('http://localhost:5000/api/resume/job-finding', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (response.ok && result.jobFinding) {
+      setAnalysis(result.jobFinding.analysis);
+      setMatchedJobs(result.jobFinding.matchedJobs || []);
+    } else {
+      setError(result.error || 'Analysis failed. Please try again.');
+      setAnalysis(null);
+      setMatchedJobs([]);
     }
+  } catch (err) {
+    setError('Network error. Please check your connection.');
+    setAnalysis(null);
+    setMatchedJobs([]);
+  } finally {
+    setLoading(false);
+  }
+};
 
-    setLoading(true);
-    setError('');
-
-    const formData = new FormData();
-    formData.append('resume', resumeFile);
-    formData.append('jobDescription', jobDescription);
-
-    try {
-      const response = await fetch('http://localhost:5000/api/resume/job-finding', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const result: ApiResponse = await response.json();
-
-      if (response.ok) {
-        setAnalysis(result.jobFinding.analysis);
-        setMatchedJobs(result.jobFinding.matchedJobs || []);
-      } else {
-        setError((result as any).error || 'Analysis failed. Please try again.');
-      }
-    } catch (err) {
-      setError('Network error. Please check your connection.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'score-high';

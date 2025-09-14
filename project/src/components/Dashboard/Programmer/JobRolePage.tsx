@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Building2, MapPin, Target, Upload, FileText, CheckCircle, XCircle } from 'lucide-react';
@@ -26,7 +24,7 @@ const JobRolePage: React.FC = () => {
   const [job, setJob] = useState<JobDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   // Resume Analyzer state
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
@@ -62,37 +60,49 @@ const JobRolePage: React.FC = () => {
     }
   };
 
-  const handleAnalyze = async () => {
-    if (!resumeFile || !job) {
-      setAnalyzeError('Please upload a resume');
+ const handleAnalyze = async () => {
+  if (!resumeFile || !job) {
+    setAnalyzeError('Please upload a resume');
+    return;
+  }
+
+  setAnalyzing(true);
+  setAnalyzeError('');
+
+  const formData = new FormData();
+  formData.append('resume', resumeFile);
+  formData.append('jobDescription', `${job.description} ${job.requirements || ''}`);
+
+  try {
+    const response = await fetch('http://localhost:5000/api/analyze-resume', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      setAnalyzeError('Analysis failed. Please try again.');
       return;
     }
 
-    setAnalyzing(true);
-    setAnalyzeError('');
-    
-    const formData = new FormData();
-    formData.append('resume', resumeFile);
-    formData.append('jobDescription', `${job.description} ${job.requirements || ''}`);
+    const result = await response.json();
+    console.log("API result:", result);
 
-    try {
-      const response = await fetch('http://localhost:5000/api/resume/analyze', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        setAnalysis(result.analysis);
-      } else {
-        setAnalyzeError('Analysis failed. Please try again.');
-      }
-    } catch (err) {
-      setAnalyzeError('Network error. Please check your connection.');
-    } finally {
-      setAnalyzing(false);
+    // ✅ Flexible handling (nested `analysis` or direct fields)
+    if (result.analysis) {
+      setAnalysis(result.analysis);
+    } else if (result.score !== undefined) {
+      setAnalysis(result);
+    } else {
+      setAnalyzeError('Unexpected response format from server.');
     }
-  };
+  } catch (err) {
+    console.error("Analysis error:", err);
+    setAnalyzeError('Network error. Please check your connection.');
+  } finally {
+    setAnalyzing(false);
+  }
+};
+
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600 bg-green-100';

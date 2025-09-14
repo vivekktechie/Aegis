@@ -36,7 +36,7 @@ const ResumeAnalyzer: React.FC = () => {
     formData.append('jobDescription', jobDescription);
 
     try {
-      const response = await fetch('http://localhost:5000/api/resume/analyze', {
+      const response = await fetch('http://localhost:5000/api/analyze-resume', {
         method: 'POST',
         body: formData,
       });
@@ -148,13 +148,24 @@ const ResumeAnalyzer: React.FC = () => {
                     <CheckCircle className="text-success me-2" size={20} />
                     Skills Found ({analysis.skillsFound.length})
                   </h6>
-                  <div className="d-flex flex-wrap gap-2">
-                    {analysis.skillsFound.map((skill, index) => (
-                      <span key={index} className="badge bg-success">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
+                  <Card className="border-success">
+                    <Card.Body className="p-3">
+                      <div className="d-flex flex-wrap gap-2">
+                        {analysis.skillsFound.map((skill, index) => (
+                          <span key={index} className="badge bg-success fs-6 px-3 py-2">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                      {analysis.skillsFound.length > 0 && (
+                        <div className="mt-3">
+                          <small className="text-muted">
+                            <strong>Great!</strong> These skills match the job requirements.
+                          </small>
+                        </div>
+                      )}
+                    </Card.Body>
+                  </Card>
                 </div>
 
                 <div className="mb-4">
@@ -162,24 +173,47 @@ const ResumeAnalyzer: React.FC = () => {
                     <XCircle className="text-danger me-2" size={20} />
                     Skills Missing ({analysis.skillsMissing.length})
                   </h6>
-                  <div className="d-flex flex-wrap gap-2">
-                    {analysis.skillsMissing.map((skill, index) => (
-                      <span key={index} className="badge bg-danger">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
+                  {analysis.skillsMissing.length > 0 ? (
+                    <Card className="border-danger">
+                      <Card.Body className="p-3">
+                        <div className="d-flex flex-wrap gap-2">
+                          {analysis.skillsMissing.map((skill, index) => (
+                            <span key={index} className="badge bg-danger fs-6 px-3 py-2">
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="mt-3">
+                          <small className="text-muted">
+                            <strong>Action Required:</strong> Consider learning or adding these skills to improve your resume match.
+                          </small>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  ) : (
+                    <div className="text-center p-3 bg-light rounded">
+                      <CheckCircle className="text-success mb-2" size={24} />
+                      <p className="text-muted mb-0">No missing skills! Great job!</p>
+                    </div>
+                  )}
                 </div>
 
                 <div>
                   <h6 className="mb-3">Recommendations</h6>
-                  <ul className="list-unstyled">
-                    {analysis.recommendations.map((rec, index) => (
-                      <li key={index} className="mb-2">
-                        <small className="text-muted">• {rec}</small>
-                      </li>
-                    ))}
-                  </ul>
+                  <Card className="border-info">
+                    <Card.Body className="p-3">
+                      <ul className="list-unstyled mb-0">
+                        {analysis.recommendations.map((rec, index) => (
+                          <li key={index} className="mb-2 d-flex align-items-start">
+                            <span className="badge bg-info me-2 mt-1 small-badge">
+                              {index + 1}
+                            </span>
+                            <small className="text-muted">{rec}</small>
+                          </li>
+                        ))}
+                      </ul>
+                    </Card.Body>
+                  </Card>
                 </div>
               </Card.Body>
             </Card>
