@@ -2,13 +2,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 /* ================================
    Global Theme - Professional Look
    ================================ */
 
 /* Font & Base */
-
-
 html, body, #root {
   height: 100%;
   margin: 0;
@@ -147,107 +146,109 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 .guide-card {
-    border: none;
-    border-radius: 1rem;
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    background: #ffffff;
-  }
-  
-  .guide-card {
-    border: none;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    padding: 1rem;
-  }
-  
-  .guide-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-  }
-  
-  .guide-card .card-body {
-    padding: 1.5rem;
-  }
-  /* Session Card Styling */
-.session-card {
-    border-radius: 1rem;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-  
-  .session-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  }
-  
-  /* Icon Circle */
-  .icon-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.875rem;
-  }
-  
-  .guide-avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: #e8f0fe;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--primary);
-    font-size: 1.5rem;
-  }
-  
-  .guide-info h5 {
-    margin-bottom: 0.2rem;
-    font-weight: 600;
-  }
-  
-  .guide-info small {
-    color: #6b7280;
-  }
-  
-  .guide-actions {
-    margin-top: 1rem;
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .guide-actions .btn {
-    flex: 1;
-    border-radius: 0.5rem;
-    font-weight: 500;
-  }
-  /* Guide Cards */
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background: #ffffff;
+}
+
 .guide-card {
-    border: none;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-  
-  .guide-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
-  }
-  
-  /* Icon Circle for Avatars */
-  .icon-circle {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  padding: 1rem;
+}
+
+.guide-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.guide-card .card-body {
+  padding: 1.5rem;
+}
+
+/* Session Card Styling */
+.session-card {
+  border-radius: 1rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.session-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Icon Circle */
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.guide-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #e8f0fe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.guide-info h5 {
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+}
+
+.guide-info small {
+  color: #6b7280;
+}
+
+.guide-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.guide-actions .btn {
+  flex: 1;
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+/* Guide Cards */
+.guide-card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.guide-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+
+/* Icon Circle for Avatars */
+.icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Tables */
 table {
   width: 100%;
